@@ -1,0 +1,11 @@
+spring:
+  name: finaldb
+  datasource:
+    url: jdbc:mysql://localhost:3306/finaldb?allowPublicKeyRetrieval=true&useSSL=false
+    username: root
+    password: Kenpachi92#
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    hibernate:
+      ddl-auto: update #none
+    show-sql: true
