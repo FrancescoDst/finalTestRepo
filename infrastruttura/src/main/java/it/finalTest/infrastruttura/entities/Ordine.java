@@ -20,7 +20,7 @@ public class Ordine {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private LocalDate data;
+    private LocalDate data = LocalDate.now();
     @Enumerated(EnumType.STRING)
     private StatoOrdine stato = StatoOrdine.IN_ATTESA;
     private Double totale;

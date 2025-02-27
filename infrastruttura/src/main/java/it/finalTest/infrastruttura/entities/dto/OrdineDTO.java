@@ -16,7 +16,7 @@ import java.util.List;
 @NoArgsConstructor
 public class OrdineDTO {
     private Long id;
-    private LocalDate data;
+    private LocalDate data = LocalDate.now();
     @Enumerated(EnumType.STRING)
     private StatoOrdine stato = StatoOrdine.IN_ATTESA;
     private Double totale;
