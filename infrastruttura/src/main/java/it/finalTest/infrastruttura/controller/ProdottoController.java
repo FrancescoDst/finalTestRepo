@@ -1,7 +1,7 @@
 package it.finalTest.infrastruttura.controller;
 
 import it.finalTest.infrastruttura.entities.dto.ProdottoDTO;
-import it.finalTest.infrastruttura.service.ProdottoService;
+import it.finalTest.infrastruttura.service.prodotto.ProdottoService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

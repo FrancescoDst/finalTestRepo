@@ -21,7 +21,8 @@ public class Ordine {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private LocalDate data;
-    private String stato; // IN_ATTESA, SPEDITO, CONSEGNATO
+    @Enumerated(EnumType.STRING)
+    private StatoOrdine stato = StatoOrdine.IN_ATTESA;
     private Double totale;
 
     @ManyToOne

@@ -1,4 +1,4 @@
-package it.finalTest.infrastruttura.service;
+package it.finalTest.infrastruttura.service.utente;
 
 import it.finalTest.infrastruttura.entities.Utente;
 import it.finalTest.infrastruttura.entities.dto.UtenteDTO;

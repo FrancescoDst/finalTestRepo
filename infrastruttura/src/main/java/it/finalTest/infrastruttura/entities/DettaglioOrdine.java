@@ -17,7 +17,6 @@ public class DettaglioOrdine {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Integer quantita;
-    private Double prezzoTotale;
 
     @ManyToOne
     @JoinColumn(name = "ordine_id", nullable = false)

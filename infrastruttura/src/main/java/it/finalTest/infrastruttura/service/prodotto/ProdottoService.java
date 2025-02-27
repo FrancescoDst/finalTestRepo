@@ -1,4 +1,4 @@
-package it.finalTest.infrastruttura.service;
+package it.finalTest.infrastruttura.service.prodotto;
 
 import it.finalTest.infrastruttura.entities.dto.ProdottoDTO;
 

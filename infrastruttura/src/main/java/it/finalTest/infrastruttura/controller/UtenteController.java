@@ -1,7 +1,7 @@
 package it.finalTest.infrastruttura.controller;
 
 import it.finalTest.infrastruttura.entities.dto.UtenteDTO;
-import it.finalTest.infrastruttura.service.UtenteService;
+import it.finalTest.infrastruttura.service.utente.UtenteService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

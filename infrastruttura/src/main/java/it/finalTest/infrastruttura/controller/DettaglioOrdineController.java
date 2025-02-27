@@ -1,7 +1,8 @@
 package it.finalTest.infrastruttura.controller;
 
 import it.finalTest.infrastruttura.entities.dto.DettaglioOrdineDTO;
-import it.finalTest.infrastruttura.service.DettaglioOrdineService;
+import it.finalTest.infrastruttura.entities.dto.OrdineDTO;
+import it.finalTest.infrastruttura.service.dettaglio.DettaglioOrdineService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,9 +24,10 @@ public class DettaglioOrdineController {
     }
 
     @PutMapping("/ordine/{ordineId}/totale")
-    public ResponseEntity<Void> updateOrderTotal(@PathVariable Long ordineId) {
-        dettaglioOrdineService.updateOrderTotal(ordineId);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<OrdineDTO> updateOrderTotal(@PathVariable Long ordineId) {
+        OrdineDTO updatedOrdineDTO = dettaglioOrdineService.updateOrderTotal(ordineId);
+        return ResponseEntity.ok(updatedOrdineDTO); // Restituisce l'ordine con il totale aggiornato
     }
 }
+
 

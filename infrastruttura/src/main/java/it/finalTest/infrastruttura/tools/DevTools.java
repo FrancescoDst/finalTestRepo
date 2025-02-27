@@ -1,13 +1,15 @@
 package it.finalTest.infrastruttura.tools;
 
-import it.finalTest.infrastruttura.entities.DettaglioOrdine;
-import it.finalTest.infrastruttura.entities.Ordine;
-import it.finalTest.infrastruttura.entities.Prodotto;
-import it.finalTest.infrastruttura.entities.Utente;
+import it.finalTest.infrastruttura.entities.*;
 import it.finalTest.infrastruttura.entities.dto.DettaglioOrdineDTO;
 import it.finalTest.infrastruttura.entities.dto.OrdineDTO;
 import it.finalTest.infrastruttura.entities.dto.ProdottoDTO;
 import it.finalTest.infrastruttura.entities.dto.UtenteDTO;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class DevTools {
     // Conversione per Utente
@@ -32,8 +34,9 @@ public class DevTools {
                 .email(utenteDTO.getEmail())
                 .build();
     }
+
     // Conversione per Prodotto
-    public static ProdottoDTO convertToDTO (Prodotto prodotto){
+    public static ProdottoDTO convertToDTO(Prodotto prodotto) {
         if (prodotto == null) {
             return null;
         }
@@ -54,52 +57,85 @@ public class DevTools {
                 .prezzo(prodottoDTO.getPrezzo())
                 .build();
     }
-    // Conversione per Ordine
-    public static OrdineDTO convertToDTO (Ordine ordine) {
+
+    public static OrdineDTO convertToDTO(Ordine ordine) {
         if (ordine == null) {
             return null;
         }
+
+        // Converte la lista di DettaglioOrdine in DettaglioOrdineDTO
+        List<DettaglioOrdineDTO> dettagliOrdineDTO = Optional.ofNullable(ordine.getDettagli())
+                .orElse(Collections.emptyList())
+                .stream()
+                .map(DevTools::convertToDTO)
+                .collect(Collectors.toList());
+
         return new OrdineDTO(
                 ordine.getId(),
                 ordine.getData(),
                 ordine.getStato(),
-                ordine.getTotale()
+                ordine.getTotale(),
+                dettagliOrdineDTO // Aggiungi la lista di dettagli ordine
         );
     }
 
-    public static Ordine convertToEntity (OrdineDTO ordineDTO) {
+    public static Ordine convertToEntity(OrdineDTO ordineDTO) {
         if (ordineDTO == null) {
             return null;
         }
+
+        // Imposta lo stato direttamente come enum
+        StatoOrdine stato = ordineDTO.getStato() != null ? ordineDTO.getStato() : StatoOrdine.IN_ATTESA;
+
         return Ordine.builder()
                 .id(ordineDTO.getId())
                 .data(ordineDTO.getData())
-                .stato(ordineDTO.getStato())
+                .stato(stato) // Imposta lo stato come enum
                 .totale(ordineDTO.getTotale())
                 .build();
     }
 
     // Conversione per Dettaglio
-    public static DettaglioOrdineDTO convertToDTO (DettaglioOrdine dettaglioOrdine) {
+    public static DettaglioOrdineDTO convertToDTO(DettaglioOrdine dettaglioOrdine) {
         if (dettaglioOrdine == null) {
             return null;
         }
+
+        // Assicurati che il prodotto non sia null
+        Long prodottoId = (dettaglioOrdine.getProdotto() != null) ? dettaglioOrdine.getProdotto().getId() : null;
+
         return new DettaglioOrdineDTO(
                 dettaglioOrdine.getId(),
                 dettaglioOrdine.getQuantita(),
-                dettaglioOrdine.getPrezzoTotale()
+                prodottoId // Assicurati di passare anche l'ID del prodotto
         );
     }
 
-    public static DettaglioOrdine convertToEntity (DettaglioOrdineDTO dettaglioOrdineDTO) {
+    public static DettaglioOrdine convertToEntity(DettaglioOrdineDTO dettaglioOrdineDTO) {
         if (dettaglioOrdineDTO == null) {
             return null;
         }
+
+        DettaglioOrdine dettaglioOrdine = DettaglioOrdine.builder()
+                .id(dettaglioOrdineDTO.getId())
+                .quantita(dettaglioOrdineDTO.getQuantita())
+                .build();
+
+        return dettaglioOrdine;
+    }
+
+    public static DettaglioOrdine convertToEntity(DettaglioOrdineDTO dettaglioOrdineDTO, Prodotto prodotto) {
+        if (dettaglioOrdineDTO == null) {
+            return null;
+        }
+
         return DettaglioOrdine.builder()
                 .id(dettaglioOrdineDTO.getId())
                 .quantita(dettaglioOrdineDTO.getQuantita())
-                .prezzoTotale(dettaglioOrdineDTO.getPrezzoTotale())
+                .prodotto(prodotto) // Associa il prodotto
                 .build();
     }
 }
+
+
 

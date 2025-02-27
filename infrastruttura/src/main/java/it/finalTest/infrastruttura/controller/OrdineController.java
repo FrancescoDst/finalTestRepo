@@ -1,7 +1,8 @@
 package it.finalTest.infrastruttura.controller;
 
+import it.finalTest.infrastruttura.entities.StatoOrdine;
 import it.finalTest.infrastruttura.entities.dto.OrdineDTO;
-import it.finalTest.infrastruttura.service.OrdineService;
+import it.finalTest.infrastruttura.service.ordine.OrdineService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,10 +30,10 @@ public class OrdineController {
         return ResponseEntity.ok(ordini);
     }
 
-    @PutMapping("/{id}/stato")
-    public ResponseEntity<OrdineDTO> updateOrderStatus(@PathVariable Long id, @RequestParam String stato) {
-        OrdineDTO updatedOrder = ordineService.updateOrderStatus(id, stato);
-        return ResponseEntity.ok(updatedOrder);
+    @PutMapping("/{ordineId}/stato")
+    public ResponseEntity<Void> updateOrderStatus(@PathVariable Long ordineId, @RequestBody StatoOrdine nuovoStato) {
+        ordineService.updateOrderStatus(ordineId, nuovoStato);
+        return ResponseEntity.noContent().build();
     }
 }
 
