@@ -19,6 +19,22 @@ public class UtenteServiceImpl implements UtenteService {
     }
 
     @Override
+    public UtenteDTO createUser(UtenteDTO userDTO) {
+        // Validazione dell'email (puoi aggiungere altre validazioni)
+        if (userDTO.getEmail() == null || userDTO.getEmail().isEmpty()) {
+            throw new IllegalArgumentException("Email is required");
+        }
+
+        // Controllo se l'email esiste già
+        if (utenteRepository.existsByEmail(userDTO.getEmail())) {
+            throw new RuntimeException("Email already exists");
+        }
+
+        // Salva e restituisce l'utente
+        return saveUser(userDTO);
+    }
+
+    @Override
     public List<UtenteDTO> getAllUsers() {
         List<Utente> utenti = utenteRepository.findAll();
         return utenti.stream()
@@ -31,11 +47,6 @@ public class UtenteServiceImpl implements UtenteService {
     public UtenteDTO saveUser(UtenteDTO userDTO) {
         // Converte il DTO in entità
         Utente user = DevTools.convertToEntity(userDTO);
-        // Se l'utente esiste già, manteniamo la password esistente
-        Utente existingUser = user.getId() != null ? utenteRepository.findById(user.getId()).orElse(null) : null;
-        if (existingUser != null) {
-            user.setEmail(existingUser.getEmail());
-        }
         Utente savedUser = utenteRepository.save(user);
         // Ritorna il DTO convertito dall'entità salvata
         return DevTools.convertToDTO(savedUser);
@@ -43,6 +54,10 @@ public class UtenteServiceImpl implements UtenteService {
 
     @Override
     public UtenteDTO updateUser(Long id, UtenteDTO userDTO) {
+        // Controllo se l'utente esiste prima di aggiornare
+        if (!utenteRepository.existsById(id)) {
+            throw new RuntimeException("User not found");
+        }
         userDTO.setId(id);
         return saveUser(userDTO);
     }
@@ -50,6 +65,10 @@ public class UtenteServiceImpl implements UtenteService {
     @Override
     @Transactional
     public void deleteUser(Long id) {
+        // Controllo se l'utente esiste prima di eliminare
+        if (!utenteRepository.existsById(id)) {
+            throw new RuntimeException("User not found");
+        }
         utenteRepository.deleteById(id);
     }
 
@@ -60,3 +79,4 @@ public class UtenteServiceImpl implements UtenteService {
         return DevTools.convertToDTO(user);
     }
 }
+

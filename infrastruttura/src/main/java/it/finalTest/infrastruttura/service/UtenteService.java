@@ -5,6 +5,7 @@ import it.finalTest.infrastruttura.entities.dto.UtenteDTO;
 import java.util.List;
 
 public interface UtenteService {
+    UtenteDTO createUser(UtenteDTO user);
 
     List<UtenteDTO> getAllUsers();
 
