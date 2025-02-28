@@ -35,7 +35,7 @@ public class DevTools {
                 .build();
     }
 
-    // Conversione per Prodotto
+    // Conversione per prodotto
     public static ProdottoDTO convertToDTO(Prodotto prodotto) {
         if (prodotto == null) {
             return null;
@@ -58,12 +58,12 @@ public class DevTools {
                 .build();
     }
 
+    // Conversione per ordine
     public static OrdineDTO convertToDTO(Ordine ordine) {
         if (ordine == null) {
             return null;
         }
 
-        // Converte la lista di DettaglioOrdine in DettaglioOrdineDTO
         List<DettaglioOrdineDTO> dettagliOrdineDTO = Optional.ofNullable(ordine.getDettagli())
                 .orElse(Collections.emptyList())
                 .stream()
@@ -75,7 +75,7 @@ public class DevTools {
                 ordine.getData(),
                 ordine.getStato(),
                 ordine.getTotale(),
-                dettagliOrdineDTO // Aggiungi la lista di dettagli ordine
+                dettagliOrdineDTO
         );
     }
 
@@ -84,13 +84,12 @@ public class DevTools {
             return null;
         }
 
-        // Imposta lo stato direttamente come enum
         StatoOrdine stato = ordineDTO.getStato() != null ? ordineDTO.getStato() : StatoOrdine.IN_ATTESA;
 
         return Ordine.builder()
                 .id(ordineDTO.getId())
                 .data(ordineDTO.getData())
-                .stato(stato) // Imposta lo stato come enum
+                .stato(stato)
                 .totale(ordineDTO.getTotale())
                 .build();
     }
@@ -101,13 +100,12 @@ public class DevTools {
             return null;
         }
 
-        // Assicurati che il prodotto non sia null
         Long prodottoId = (dettaglioOrdine.getProdotto() != null) ? dettaglioOrdine.getProdotto().getId() : null;
 
         return new DettaglioOrdineDTO(
                 dettaglioOrdine.getId(),
                 dettaglioOrdine.getQuantita(),
-                prodottoId // Assicurati di passare anche l'ID del prodotto
+                prodottoId
         );
     }
 
@@ -132,7 +130,7 @@ public class DevTools {
         return DettaglioOrdine.builder()
                 .id(dettaglioOrdineDTO.getId())
                 .quantita(dettaglioOrdineDTO.getQuantita())
-                .prodotto(prodotto) // Associa il prodotto
+                .prodotto(prodotto)
                 .build();
     }
 }

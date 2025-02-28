@@ -29,31 +29,28 @@ public class OrdineServiceImpl implements OrdineService {
         this.prodottoRepository = prodottoRepository;
     }
 
+    // Calcola il totale in base ai dettagli ordine
     @Override
     @Transactional
     public OrdineDTO createOrder(Long userId, OrdineDTO ordineDTO) {
         ordineDTO.setData(LocalDate.now());
 
-        // Calcola il totale in base ai dettagli ordine
         Double totale = ordineDTO.getDettagli().stream()
                 .mapToDouble(dettaglioDTO -> {
                     // Recupera il prodotto in base all'ID
                     Prodotto prodotto = prodottoRepository.findById(dettaglioDTO.getProdottoId())
                             .orElseThrow(() -> new RuntimeException("Product not found"));
-                    return prodotto.getPrezzo() * dettaglioDTO.getQuantita(); // Calcola il totale per ogni prodotto
+                    return prodotto.getPrezzo() * dettaglioDTO.getQuantita();
                 })
                 .sum();
         ordineDTO.setTotale(totale);
 
-        // Crea l'oggetto Ordine
         Ordine ordine = DevTools.convertToEntity(ordineDTO);
 
-        // Recupera l'utente e associa all'ordine
         Utente utente = utenteRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
         ordine.setUtente(utente);
 
-        // Salva l'ordine
         Ordine savedOrder = ordineRepository.save(ordine);
         return DevTools.convertToDTO(savedOrder);
     }
@@ -66,16 +63,33 @@ public class OrdineServiceImpl implements OrdineService {
                 .collect(Collectors.toList());
     }
 
+    // Imposta il nuovo stato
     @Override
     @Transactional
     public OrdineDTO updateOrderStatus(Long id, StatoOrdine stato) {
         Ordine ordine = ordineRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Order not found"));
 
-        // Imposta il nuovo stato
         ordine.setStato(stato);
         Ordine updatedOrder = ordineRepository.save(ordine);
         return DevTools.convertToDTO(updatedOrder);
     }
 
+    // Somma i totali degli ordini dell'utente
+    @Transactional
+    public Double calcolaTotaleSpeso(Long userId) {
+        Utente utente = utenteRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        return utente.getOrdini().stream()
+                .mapToDouble(Ordine::getTotale)
+                .sum();
+    }
+
+    public List<OrdineDTO> getOrdiniInIntervallo(LocalDate startDate, LocalDate endDate) {
+        List<Ordine> ordini = ordineRepository.findByDataBetween(startDate, endDate);
+        return ordini.stream()
+                .map(DevTools::convertToDTO)
+                .collect(Collectors.toList());
+    }
 }

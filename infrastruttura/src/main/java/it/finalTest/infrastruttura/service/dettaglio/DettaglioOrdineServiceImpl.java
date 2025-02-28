@@ -37,7 +37,7 @@ public class DettaglioOrdineServiceImpl implements DettaglioOrdineService {
         // Crea il dettaglio ordine
         DettaglioOrdine dettaglioOrdine = DevTools.convertToEntity(dettaglioOrdineDTO);
         dettaglioOrdine.setOrdine(ordine);
-        dettaglioOrdine.setProdotto(prodotto); // Associa il prodotto
+        dettaglioOrdine.setProdotto(prodotto);
 
         // Aggiungi il dettaglio ordine alla lista dell'ordine
         ordine.getDettagli().add(dettaglioOrdine);
@@ -52,12 +52,12 @@ public class DettaglioOrdineServiceImpl implements DettaglioOrdineService {
         return DevTools.convertToDTO(savedDettaglio);
     }
 
+    // Totale basato sui dettagli ordine
     @Override
     public OrdineDTO updateOrderTotal(Long ordineId) {
         Ordine ordine = ordineRepository.findById(ordineId)
                 .orElseThrow(() -> new RuntimeException("Order not found"));
 
-        // Calcola il totale basato sui dettagli ordine
         List<DettaglioOrdine> dettagli = dettaglioOrdineRepository.findByOrdineId(ordineId);
         double totale = dettagli.stream()
                 .mapToDouble(dettaglio -> {
@@ -69,7 +69,6 @@ public class DettaglioOrdineServiceImpl implements DettaglioOrdineService {
         ordine.setTotale(totale);
         ordineRepository.save(ordine);
 
-        // Converti Ordine in OrdineDTO
         return DevTools.convertToDTO(ordine);
     }
 

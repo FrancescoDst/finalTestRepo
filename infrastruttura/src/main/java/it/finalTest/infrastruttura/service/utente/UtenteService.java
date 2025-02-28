@@ -1,5 +1,6 @@
 package it.finalTest.infrastruttura.service.utente;
 
+import it.finalTest.infrastruttura.entities.Utente;
 import it.finalTest.infrastruttura.entities.dto.UtenteDTO;
 
 import java.util.List;

@@ -19,14 +19,14 @@ public class DettaglioOrdineController {
 
     @PostMapping("/ordine/{ordineId}/prodotto")
     public ResponseEntity<DettaglioOrdineDTO> addProductToOrder(@PathVariable Long ordineId, @RequestBody DettaglioOrdineDTO dettaglioOrdineDTO) {
-        DettaglioOrdineDTO createdDettaglio = dettaglioOrdineService.addProductToOrder(ordineId, dettaglioOrdineDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdDettaglio);
+        DettaglioOrdineDTO createDettaglio = dettaglioOrdineService.addProductToOrder(ordineId, dettaglioOrdineDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createDettaglio);
     }
 
     @PutMapping("/ordine/{ordineId}/totale")
     public ResponseEntity<OrdineDTO> updateOrderTotal(@PathVariable Long ordineId) {
         OrdineDTO updatedOrdineDTO = dettaglioOrdineService.updateOrderTotal(ordineId);
-        return ResponseEntity.ok(updatedOrdineDTO); // Restituisce l'ordine con il totale aggiornato
+        return ResponseEntity.ok(updatedOrdineDTO);
     }
 }
 

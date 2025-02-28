@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
 @Service
 public class UtenteServiceImpl implements UtenteService {
 
@@ -20,17 +21,15 @@ public class UtenteServiceImpl implements UtenteService {
 
     @Override
     public UtenteDTO createUser(UtenteDTO userDTO) {
-        // Validazione dell'email (puoi aggiungere altre validazioni)
+
         if (userDTO.getEmail() == null || userDTO.getEmail().isEmpty()) {
             throw new IllegalArgumentException("Email is required");
         }
 
-        // Controllo se l'email esiste già
         if (utenteRepository.existsByEmail(userDTO.getEmail())) {
             throw new RuntimeException("Email already exists");
         }
 
-        // Salva e restituisce l'utente
         return saveUser(userDTO);
     }
 
@@ -45,10 +44,9 @@ public class UtenteServiceImpl implements UtenteService {
     @Override
     @Transactional
     public UtenteDTO saveUser(UtenteDTO userDTO) {
-        // Converte il DTO in entità
         Utente user = DevTools.convertToEntity(userDTO);
         Utente savedUser = utenteRepository.save(user);
-        // Ritorna il DTO convertito dall'entità salvata
+
         return DevTools.convertToDTO(savedUser);
     }
 
@@ -62,10 +60,10 @@ public class UtenteServiceImpl implements UtenteService {
         return saveUser(userDTO);
     }
 
+    // Controllo se l'utente esiste prima di eliminare
     @Override
     @Transactional
     public void deleteUser(Long id) {
-        // Controllo se l'utente esiste prima di eliminare
         if (!utenteRepository.existsById(id)) {
             throw new RuntimeException("User not found");
         }
